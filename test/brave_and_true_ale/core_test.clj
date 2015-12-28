@@ -20,3 +20,16 @@
            (validate {:name "Test Name" :email "test.foo"} order-details-validations))))
   (testing "Returns empty for well-formed entries"
     (is (empty? (validate {:name "Test Name" :email "test@foo.bar"} order-details-validations)))))
+
+(deftest is-valid-test
+  (testing "macro is well-formed"
+    (is (=
+          '(let*
+             [my-error-name (brave-and-true-ale.core/validate order-details order-details-validations)]
+             (if (clojure.core/empty? my-error-name)
+               (println :success)
+               (println :failure my-error-name)))
+          (macroexpand
+            '(if-valid order-details order-details-validations my-error-name
+                       (println :success)
+                       (println :failure my-error-name)))))))

@@ -13,17 +13,24 @@
                      (partition 2 message-validator-pairs))))
 
 (defn validate
-  "Returns a map with a vector of errors for each key in an order detail"
-  [order-detail validations]
+  "Returns a map with a vector of errors for each key in data to be validated"
+  [to-validate validations]
   (reduce (fn [errors validation]
             (let [[field-name message-validator-pairs] validation
-                  value (get order-detail field-name)
+                  value (get to-validate field-name)
                   error-messages (error-messages-for value message-validator-pairs)]
               (if (empty? error-messages)
                 errors
                 (assoc errors field-name error-messages))))
           {}
           validations))
+
+(defmacro if-valid
+  "Handle validation more concisely"
+  [to-validate validations error-name & then-else]
+  `(let [~error-name (validate ~to-validate ~validations)]
+     (if (empty? ~error-name)
+       ~@then-else)))
 
 (defn -main
   "I don't do a whole lot ... yet."
