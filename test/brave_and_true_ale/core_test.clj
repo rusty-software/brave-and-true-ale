@@ -10,3 +10,13 @@
   (testing "Returns empty collection for fields that pass validation"
     (is (empty? (error-messages-for "Test Name" (:name order-details-validations))))
     (is (empty? (error-messages-for "test@name.com" (:email order-details-validations))))))
+
+(deftest validate-test
+  (testing "Returns an errors collection for malformed entries"
+    (is (= {:name ["Please enter a name"]
+            :email ["Please enter an email address"]}
+           (validate {:name "" :email ""} order-details-validations)))
+    (is (= {:email ["Your email address doesn't look like an email address"]}
+           (validate {:name "Test Name" :email "test.foo"} order-details-validations))))
+  (testing "Returns empty for well-formed entries"
+    (is (empty? (validate {:name "Test Name" :email "test@foo.bar"} order-details-validations)))))

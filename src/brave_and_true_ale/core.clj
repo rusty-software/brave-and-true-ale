@@ -8,9 +8,22 @@
 
 (defn error-messages-for
   "Returns a seq of error messages"
-  [to-validate message-validator-pairs]
-  (map first (filter #(not ((second %) to-validate))
+  [value message-validator-pairs]
+  (map first (filter #(not ((second %) value))
                      (partition 2 message-validator-pairs))))
+
+(defn validate
+  "Returns a map with a vector of errors for each key in an order detail"
+  [order-detail validations]
+  (reduce (fn [errors validation]
+            (let [[field-name message-validator-pairs] validation
+                  value (get order-detail field-name)
+                  error-messages (error-messages-for value message-validator-pairs)]
+              (if (empty? error-messages)
+                errors
+                (assoc errors field-name error-messages))))
+          {}
+          validations))
 
 (defn -main
   "I don't do a whole lot ... yet."
