@@ -32,6 +32,10 @@
      (if (empty? ~error-name)
        ~@then-else)))
 
+(defmacro when-valid
+  "when-like macro"
+  [to-validate validations & then-else])
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
