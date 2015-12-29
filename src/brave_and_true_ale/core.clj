@@ -38,6 +38,11 @@
   `(when (empty? (validate ~to-validate ~validations))
      ~@when-body))
 
+(defmacro my-or
+  "macro for 'or'"
+  [& args]
+  )
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
