@@ -34,7 +34,9 @@
 
 (defmacro when-valid
   "when-like macro"
-  [to-validate validations & then-else])
+  [to-validate validations & when-body]
+  `(when (empty? (validate ~to-validate ~validations))
+     ~@when-body))
 
 (defn -main
   "I don't do a whole lot ... yet."

@@ -21,15 +21,28 @@
   (testing "Returns empty for well-formed entries"
     (is (empty? (validate {:name "Test Name" :email "test@foo.bar"} order-details-validations)))))
 
-(deftest is-valid-test
+#_(deftest is-valid-test
+  (testing "macro is well-formed"
+    (let [buttz (macroexpand
+                  '(if-valid order-details order-details-validations my-error-name
+                             (println :success)
+                             (println :failure my-error-name)))]
+      (is (=
+           '(let*
+              [my-error-name (brave-and-true-ale.core/validate order-details order-details-validations)]
+              (if (clojure.core/empty? my-error-name)
+                (println :success)
+                (println :failure my-error-name)))
+           buttz)))))
+
+#_(deftest when-valid-test
   (testing "macro is well-formed"
     (is (=
-          '(let*
-             [my-error-name (brave-and-true-ale.core/validate order-details order-details-validations)]
-             (if (clojure.core/empty? my-error-name)
-               (println :success)
-               (println :failure my-error-name)))
+          '(if (clojure.core/empty? (brave-and-true-ale.core/validate order-details order-details-validations))
+             (do
+               (println "It's a success!")
+               (render :success)))
           (macroexpand
-            '(if-valid order-details order-details-validations my-error-name
-                       (println :success)
-                       (println :failure my-error-name)))))))
+            '(when-valid order-details order-details-validations
+                         (println "It's a success")
+                         (println :success)))))))
