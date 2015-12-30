@@ -40,8 +40,9 @@
 
 (defmacro my-or
   "macro for 'or'"
-  [& args]
-  )
+  [arg & args]
+  `(let [or# ~arg]
+     (if or# or# (or ~@args))))
 
 (defn -main
   "I don't do a whole lot ... yet."
