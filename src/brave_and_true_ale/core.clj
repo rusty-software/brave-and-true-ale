@@ -44,6 +44,10 @@
   `(let [or# ~arg]
      (if or# or# (or ~@args))))
 
+(defmacro defattrs
+  [& args]
+  )
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
