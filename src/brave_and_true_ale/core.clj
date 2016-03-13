@@ -27,9 +27,9 @@
 
 (defmacro if-valid
   "Handle validation more concisely"
-  [to-validate validations error-name & then-else]
-  `(let [~error-name (validate ~to-validate ~validations)]
-     (if (empty? ~error-name)
+  [to-validate validations errors-name & then-else]
+  `(let [~errors-name (validate ~to-validate ~validations)]
+     (if (empty? ~errors-name)
        ~@then-else)))
 
 (defmacro when-valid

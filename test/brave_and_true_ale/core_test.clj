@@ -1,5 +1,6 @@
 (ns brave-and-true-ale.core-test
   (:require [clojure.test :refer :all]
+            [clojure.walk :refer [macroexpand-all]]
             [brave-and-true-ale.core :refer :all]))
 
 (deftest error-messages-for-test
@@ -21,19 +22,19 @@
   (testing "Returns empty for well-formed entries"
     (is (empty? (validate {:name "Test Name" :email "test@foo.bar"} order-details-validations)))))
 
-#_(deftest is-valid-test
+(deftest if-valid-test
   (testing "macro is well-formed"
-    (let [buttz (macroexpand
-                  '(if-valid order-details order-details-validations my-error-name
-                             (println :success)
-                             (println :failure my-error-name)))]
+    (let [expanded (macroexpand
+                     '(if-valid order-details order-details-validations my-error-name
+                                (println :success)
+                                (println :failure my-error-name)))]
       (is (=
            '(let*
               [my-error-name (brave-and-true-ale.core/validate order-details order-details-validations)]
               (if (clojure.core/empty? my-error-name)
                 (println :success)
                 (println :failure my-error-name)))
-           buttz)))))
+           expanded)))))
 
 #_(deftest when-valid-test
   (testing "macro is well-formed"
